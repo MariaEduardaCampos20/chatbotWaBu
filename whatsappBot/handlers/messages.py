@@ -3,9 +3,9 @@ def process_message(message):
 
     if "oi" in message:
         return "Olá! Como posso te ajudar?"
-    elif "preço" in message:
-        return "Temos planos a partir de R$99."
-    elif "contato" in message:
-        return "Você pode falar com um atendente humano."
+    elif "Pedido" in message:
+        return "Faça seu pedido aqui: https://instadelivery.com.br/joaoalemaobar."
+    elif "cardapio" in message:
+        return ""
     else:
         return "Desculpa, não entendi. Pode reformular?"
