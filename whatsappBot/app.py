@@ -10,6 +10,16 @@ PHONE_ID = "SEU_PHONE_NUMBER_ID"
 GROQ_API_KEY = "SUA_GROQ_API_KEY"
 
 client = Groq(api_key=GROQ_API_KEY)
+ 
+chat = client.chat.completions.create(
+    messages=[
+        {"role": "system", "content": "Você é um assistente educado e profissional da Nexa."},
+        {"role": "user", "content": "Olá, o que é a Nexa?"}
+    ],
+    model="llama3-8b-8192"
+)
+
+print(chat.choices[0].message.content) 
 
 # 🔁 VERIFICAÇÃO DO WEBHOOK (Meta)
 @app.route("/webhook", methods=["GET"])
