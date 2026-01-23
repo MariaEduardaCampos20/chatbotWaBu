@@ -1,0 +1,93 @@
+Política de Privacidade – Nexa | ChatbotWabu
+
+A Nexa – ChatbotWabu respeita a privacidade dos usuários e está comprometida com a proteção dos dados pessoais tratados por meio de suas soluções de automação e atendimento digital.
+
+Esta Política de Privacidade descreve como coletamos, utilizamos, armazenamos e protegemos as informações dos usuários que interagem com o ChatbotWabu.
+
+Ao utilizar nossos serviços, você concorda com os termos desta Política.
+
+1. Coleta de Informações
+
+O ChatbotWabu pode coletar os seguintes dados:
+
+Informações fornecidas diretamente pelo usuário, como:
+
+Nome
+
+Número de telefone
+
+Mensagens enviadas via WhatsApp
+
+Dados técnicos, como:
+
+Endereço IP
+
+Tipo de dispositivo
+
+Data e hora das interações
+
+Informações necessárias para a automação do atendimento e funcionamento do chatbot.
+
+2. Uso das Informações
+
+As informações coletadas são utilizadas para:
+
+Realizar atendimento automatizado via WhatsApp;
+
+Melhorar a experiência do usuário;
+
+Personalizar respostas e fluxos do chatbot;
+
+Prestar suporte e comunicação com o usuário;
+
+Cumprir obrigações legais e regulatórias;
+
+Garantir segurança e prevenir usos indevidos.
+
+3. Compartilhamento de Dados
+
+A Nexa – ChatbotWabu não vende nem comercializa dados pessoais.
+
+Os dados poderão ser compartilhados apenas quando:
+
+Necessário para funcionamento do serviço (ex: provedores de hospedagem, APIs e plataformas como Meta/WhatsApp);
+
+Exigido por lei ou ordem judicial;
+
+Houver consentimento do usuário.
+
+4. Armazenamento e Segurança
+
+Adotamos medidas técnicas e organizacionais para proteger os dados contra acesso não autorizado, vazamento, alteração ou destruição.
+
+Os dados são armazenados somente pelo período necessário para cumprir as finalidades descritas nesta Política.
+
+5. Direitos do Usuário (LGPD)
+
+Nos termos da Lei Geral de Proteção de Dados (Lei nº 13.709/2018), o usuário tem direito de:
+
+Confirmar a existência de tratamento de dados;
+
+Acessar, corrigir ou atualizar seus dados;
+
+Solicitar a exclusão de dados pessoais;
+
+Revogar o consentimento a qualquer momento.
+
+As solicitações podem ser feitas por meio dos canais oficiais da Nexa.
+
+6. Integrações com Terceiros
+
+O ChatbotWabu utiliza integrações com plataformas de terceiros, como WhatsApp Business (Meta). Cada plataforma possui sua própria Política de Privacidade, não sendo responsabilidade da Nexa o tratamento de dados realizado por esses terceiros.
+
+7. Cookies e Tecnologias Semelhantes
+
+Quando aplicável em sites ou painéis administrativos, poderão ser utilizados cookies para melhorar desempenho e experiência do usuário.
+
+8. Alterações nesta Política
+
+Esta Política de Privacidade pode ser atualizada a qualquer momento. Recomendamos a revisão periódica. As alterações passam a valer a partir da data de publicação.
+
+9. Contato
+
+Em caso de dúvidas sobre esta Política de Privacidade ou sobre o tratamento de dados pessoais, entre em contato pelos canais oficiais da Nexa – ChatbotWabu.
