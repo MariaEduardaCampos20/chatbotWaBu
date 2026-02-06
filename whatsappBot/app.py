@@ -4,108 +4,97 @@ from groq import Groq
 import os
 from dotenv import load_dotenv
 
-# Carrega .env
+# ================================
+# 🔧 CONFIGURAÇÃO INICIAL
+# ================================
 load_dotenv()
-
 app = Flask(__name__)
 
-# 🔑 CHAVES
 TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_ID = os.getenv("PHONE_NUMBER_ID")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN")
 
-# Valida variáveis
 if not all([TOKEN, PHONE_ID, GROQ_API_KEY, VERIFY_TOKEN]):
     print("❌ ERRO: Variáveis de ambiente faltando!")
     exit(1)
 
 print("✅ Variáveis carregadas com sucesso!")
 
-# Inicializa Groq
 client = Groq(api_key=GROQ_API_KEY)
 
-# ✨ ADICIONE ESTE BLOCO AQUI - Bypass do aviso do Ngrok
-@app.before_request
-def before_request():
-    # Adiciona header para bypass do aviso do ngrok
-    pass
+# ================================
+# 🤖 FUNÇÃO QUE FALA COM O GROQ
+# ================================
+def gerar_resposta_groq(texto_usuario):
+    try:
+        resposta = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": "Você é a Nexa, uma IA profissional, educada e prestativa."},
+                {"role": "user", "content": texto_usuario}
+            ]
+        )
+        return resposta.choices[0].message.content
+    except Exception as e:
+        print(f"❌ Erro no Groq: {e}")
+        return "Tive um problema ao responder."
 
-@app.after_request
-def after_request(response):
-    response.headers['ngrok-skip-browser-warning'] = 'true'
-    return response
-# ✨ FIM DO BLOCO NOVO
-
-# Teste inicial
+# ================================
+# 🧪 TESTE INICIAL DO GROQ
+# ================================
 print("🔄 Testando Groq...")
 try:
-    chat = client.chat.completions.create(
-        messages=[
-            {"role": "system", "content": "Você é um assistente educado e profissional da Nexa."},
-            {"role": "user", "content": "Olá, o que é a Nexa?"}
-        ],
-        model="llama-3.3-70b-versatile"
-    )
-    print("✅ Groq OK!")
-    print(f"Resposta teste: {chat.choices[0].message.content}\n")
+    print("Resposta teste:", gerar_resposta_groq("Olá, o que é a Nexa?"), "\n")
+    print("✅ Groq OK!\n")
 except Exception as e:
     print(f"❌ Erro no Groq: {e}")
     exit(1)
 
-# 🔁 VERIFICAÇÃO DO WEBHOOK (Meta)
+# ================================
+# 💻 MODO CHAT NO TERMINAL
+# ================================
+def chat_terminal():
+    print("\n🤖 Modo Terminal Ativado! Digite 'sair' para encerrar.\n")
+    while True:
+        user_input = input("Você: ")
+
+        if user_input.lower() in ["sair", "exit", "quit"]:
+            print("Encerrando chat...")
+            break
+
+        resposta = gerar_resposta_groq(user_input)
+        print("Wabu:", resposta)
+
+# ================================
+# 🌐 WEBHOOK WHATSAPP
+# ================================
 @app.route("/webhook", methods=["GET"])
 def verify():
     token = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
-    
+
     if token == VERIFY_TOKEN:
-        print(f"✅ Webhook verificado!")
+        print("✅ Webhook verificado!")
         return challenge
-    
-    print(f"❌ Token inválido recebido: {token}")
+
+    print("❌ Token inválido")
     return "Erro de verificação", 403
 
-# 📩 RECEBE MENSAGEM
+
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
-    print(f"📨 Webhook recebido: {data}")
+    print("📨 Webhook recebido:", data)
 
     try:
         msg = data["entry"][0]["changes"][0]["value"]["messages"][0]
         texto = msg["text"]["body"]
         numero = msg["from"]
-        
-        print(f"💬 Mensagem de {numero}: {texto}")
-        
-    except KeyError as e:
-        print(f"⚠️ Mensagem sem texto ou formato inesperado: {e}")
-        return "ok"
-    except Exception as e:
-        print(f"❌ Erro ao processar webhook: {e}")
-        return "ok"
+        print(f"💬 {numero}: {texto}")
 
-    # 🤖 Gera resposta com IA
-    try:
-        print("🤖 Gerando resposta com IA...")
-        resposta = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {"role": "system", "content": "Você é a Nexa, uma IA de atendimento profissional e educada."},
-                {"role": "user", "content": texto}
-            ]
-        )
-        
-        resposta_texto = resposta.choices[0].message.content
-        print(f"🤖 IA respondeu: {resposta_texto}")
-        
-    except Exception as e:
-        print(f"❌ Erro na IA: {e}")
-        resposta_texto = "Desculpe, estou com dificuldades no momento. Tente novamente."
+        resposta_texto = gerar_resposta_groq(texto)
 
-    # 📤 ENVIA PARA WHATSAPP
-    try:
         url = f"https://graph.facebook.com/v19.0/{PHONE_ID}/messages"
         headers = {
             "Authorization": f"Bearer {TOKEN}",
@@ -115,29 +104,37 @@ def webhook():
             "messaging_product": "whatsapp",
             "to": numero,
             "type": "text",
-            "text": {
-                "body": resposta_texto
-            }
+            "text": {"body": resposta_texto}
         }
 
-
-
         response = requests.post(url, headers=headers, json=payload)
-        
+
         if response.status_code == 200:
-            print(f"✅ Mensagem enviada com sucesso!")
+            print("✅ Mensagem enviada!")
         else:
-            print(f"❌ Erro ao enviar mensagem: {response.status_code}")
-            print(f"Resposta: {response.text}")
-            
+            print("❌ Erro ao enviar:", response.text)
+
     except Exception as e:
-        print(f"❌ Erro ao enviar para WhatsApp: {e}")
+        print(f"❌ Erro no webhook: {e}")
 
-    return "ok"
+    return "ok", 200
 
+# ================================
+# 🚀 ESCOLHA DO MODO DE EXECUÇÃO
+# ================================
 if __name__ == "__main__":
-    print("\n🚀 Iniciando servidor Flask...")
-    print(f"📱 Phone ID: {PHONE_ID}")
-    print(f"🔐 Verify Token: {VERIFY_TOKEN}")
-    print("=" * 50)
-    app.run(port=5000, debug=True)
+    print("Escolha o modo de execução:")
+    print("1 - Servidor WhatsApp (Flask)")
+    print("2 - Chat direto no Terminal")
+
+    modo = input("Digite 1 ou 2: ")
+
+    if modo == "1":
+        print("\n🚀 Iniciando servidor Flask...")
+        print(f"📱 Phone ID: {PHONE_ID}")
+        print(f"🔐 Verify Token: {VERIFY_TOKEN}")
+        print("=" * 50)
+        app.run(port=5000, debug=True)
+    else:
+        chat_terminal()
+
